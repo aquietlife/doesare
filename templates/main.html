@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>{{ page_title }}</title>
+		<link rel="stylesheet" href ="{{ static_url("css/style.css") }}" />
+	</head>
+	<body>
+		<div id="container">
+			<header>
+				{% block header %}<h1>Does Are</h1>{% end %}
+			</header>
+			<div id="nav">
+				<a href="/news">News</a> | About | Bands | Shop | Contact | Friends | Social
+			</div>
+			<div id="main">
+				<div id="content">
+					{% block body %}{% end %}
+				</div>
+			</div>
+			<footer>
+				{% block footer %}
+					<p>Does Are Footer</p>
+				{% end %}
+			</footer>
+		</div>
+		<script src=" {{ static_url("js/script.js") }} "></script>
+	</body>
+</html>
+

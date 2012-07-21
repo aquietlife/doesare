@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+<h2>Recommended Reading</h2>
+	{% for band in bands %}
+		{% module Band(band) %}
+	{% end %}
+{% end %}
