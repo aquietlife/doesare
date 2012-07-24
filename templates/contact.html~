@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+<p>
+<a href="mailto:doesare@gmail.com">doesare@gmail.com</a>
+</p>
+
+{% end %}
+

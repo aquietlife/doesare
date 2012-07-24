@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+<p>
+Shop for Does Are.
+</p>
+
+{% end %}
+

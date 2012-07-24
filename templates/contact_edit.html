@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+<form method="POST">
+	Text <input type="text" name="text"
+	value="{{ contact_content.get('text', '') }}"></br>
+
+	<input type="submit" value="Save">
+</form>
+{% end %}

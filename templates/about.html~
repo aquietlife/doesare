@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+<p>
+{{ about_content.get('text', '') }}
+</p>
+
+
+{% end %}
+
