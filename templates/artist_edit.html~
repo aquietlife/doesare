@@ -3,23 +3,48 @@
 
 {% block body %}
 <form method="POST">
-	Name <input type="text" name="name"
-	value="{{ artist.get('name', '') }}"></br>
+	Full Name:  <input type="text" name="fullname"
+	value="{{ artist.get('fullname', '') }}"></br>
+
+	Short Name (all undercase, no spaces):  <input type="text" name="shortname"
+	value="{{ artist.get('shortname', '') }}"></br>
+
+	Members: <input type="text" name="members"
+	value="{{ artist.get('members', '') }}"></br>
 
 	Image <input type="text" name="image"
 	value="{{ artist.get('image', '') }}"></br>
 
-	Description <input type="text" name="description"
-	value="{{ artist.get('description', '') }}"></br>
+	Location: <input type="text" name="location"
+	value="{{ artist.get('location', '') }}"></br>
 
-	Releases <input type="text" name="releases"
+	Description: <input type="text" name="description"
+	value="{{ artist.get('description', '') }}"</br>
+
+	Link:  <input type="text" name="link"
+	value="{{ artist.get('link', '') }}"></br>
+
+	Releases:  <input type="text" name="releases"
 	value="{{ artist.get('releases', '') }}"></br>
 
-	Tour Dates <input type="text" name="tourdates"
-	value="{{ artist.get('tourdates', '') }}"></br>
+	Tour Dates: <input type="text" name="tourdates"
+	value="{{ artist.get('members', '') }}"></br>
 
-	Contact Info <input type="text" name="contactinfo"
-	value="{{ artist.get('contactinfo', '') }}"</br>
+	Contact Info: <input type="text" name="contactinfo"
+	value="{{ artist.get('contactinfo', '') }}"></br>
+
+	Song 1: <input type="text" name="song1"
+	value="{{ artist.get('song1', '') }}"></br>
+
+	Song 2: <input type="text" name="song2"
+	value="{{ artist.get('song2', '') }}"</br>
+	
+	Song 3: <input type="text" name="song3"
+	value="{{ artist.get('song3', '') }}"></br>
+
+	Video: <input type="text" name="video"
+	value="{{ artist.get('video', '') }}"</br>
+
 	<input type="submit" value="Save">
 </form>
 {% end %}

@@ -133,22 +133,22 @@ class ArtistsHandler(tornado.web.RequestHandler):
 	
 
 class BandEditHandler(tornado.web.RequestHandler):
-	def get(self, name=None):
+	def get(self, shortname=None):
 		artist = dict()
-		if name:
-			coll = self.application.db.artist
-			artist = coll.find_one({"name": name})
+		if shortname:
+			coll = self.application.db.artists
+			artist = coll.find_one({"shortname": shortname})
 		self.render("artist_edit.html",
 				page_title="Does Are | Band",
 				header_text = "Edit band",
 				artist=artist)
 	
-	def post(self, name=None):
-		artist_fields = ['name', 'image', 'description', 'releases', 'tourdates', 'contactinfo']
+	def post(self, shortname=None):
+		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video']
 		coll = self.application.db.artists
 		artist = dict()
-		if name:
-			artist = coll.find_one({"name": name})
+		if shortname:
+			artist = coll.find_one({"shortname": shortname})
 		for key in artist_fields:
 			artist[key] = self.get_argument(key, None)
 

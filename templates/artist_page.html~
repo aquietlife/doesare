@@ -2,7 +2,7 @@
 {% autoescape None %}
 
 {% block body %}
-	<p>{{ artist.get('name') }}</p>
+	<p>{{ artist.get('name', '') }}</p>
 	<br>
 	<p>{{ artist.get('image', '') }}</p>
 	<br>
