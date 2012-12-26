@@ -21,6 +21,7 @@ class Application(tornado.web.Application):
 				(r"/artists", ArtistsHandler),
 				(r"/edit/(\w+)", BandEditHandler),
 				(r"/add", BandEditHandler),
+				(r"/artists/(\w+)", ArtistPageHandler),
 				(r"/shop", ShopHandler),
 				(r"/shop/edit", ShopEditHandler),
 				(r"/contact", ContactHandler),
@@ -124,7 +125,7 @@ class ArtistsHandler(tornado.web.RequestHandler):
 		coll=self.application.db.artists
 		artists = coll.find()
 		self.render(
-				"recommended.html",
+				"artists.html",
 				page_title = "Does Are | Recommended Artists",
 				header_text = "Recommended Artists",
 				artists = artists
@@ -155,7 +156,20 @@ class BandEditHandler(tornado.web.RequestHandler):
 			coll.save(artist)
 		else:
 			coll.insert(artist)
-		self.redirect("/recommended/")
+		self.redirect("/artists")
+
+#render individual band pages
+class ArtistPageHandler(tornado.web.RequestHandler):
+	def get(self, name=None):
+		artist = dict()
+		if name:
+			coll = self.application.db.artists
+			artist = coll.find_one({"name": name})
+		self.render("artist_page.html",
+				page_title="Does Are | Band Page",
+				header_text = "Band Page",
+				artist=artist)
+
 
 class ArtistModule(tornado.web.UIModule):
 	def render(self, artist):

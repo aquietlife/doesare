@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+	<p>{{ artist.get('name') }}</p>
+	<br>
+	<p>{{ artist.get('image', '') }}</p>
+	<br>
+	<p>{{ artist.get('description', '') }}</p>
+	<br>
+	<p>{{ artist.get('releases', '') }}</p>
+	<br>
+	<p>{{ artist.get('tourdates', '') }}"</p>
+	<br>
+	<p>{{ artist.get('contactinfo', '') }}</p>
+{% end %}

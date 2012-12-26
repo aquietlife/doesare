@@ -1,5 +1,5 @@
-<div class="band">
-	<h3 class="band_name">{{ band["name"] }} </h3>
+<div class="artist">
+	<h3 class="artist_name">{{ artist["name"] }} </h3>
 	<br>
-	<p>image location: {{ band["image"] }} </p>
+	<p>image location: {{ artist["image"] }} </p>
 </div>
