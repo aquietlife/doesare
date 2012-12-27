@@ -152,7 +152,7 @@ class BandEditHandler(tornado.web.RequestHandler):
 		for key in artist_fields:
 			artist[key] = self.get_argument(key, None)
 
-		if name:
+		if shortname:
 			coll.save(artist)
 		else:
 			coll.insert(artist)
@@ -164,7 +164,7 @@ class ArtistPageHandler(tornado.web.RequestHandler):
 		artist = dict()
 		if name:
 			coll = self.application.db.artists
-			artist = coll.find_one({"name": name})
+			artist = coll.find_one({"shortname": name})
 		self.render("artist_page.html",
 				page_title="Does Are | Band Page",
 				header_text = "Band Page",

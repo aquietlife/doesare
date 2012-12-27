@@ -1,5 +1,7 @@
 <div class="artist">
-	<h3 class="artist_name">{{ artist["shortname"] }} </h3>
+	<h3 class="artist_name"><a href="/artists/{{ artist["shortname"] }}">{{artist["fullname"]}}</a> </h3>
+	<p>Location: {{artist["location"]}}</p>
+	<p>Image: {{ artist["image"] }} </p>
+	<p>Description: {{artist["description"]}}</p>
 	<br>
-	<p>image location: {{ artist["image"] }} </p>
 </div>
