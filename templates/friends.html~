@@ -3,7 +3,7 @@
 {% block body %}
 
 <p>
-Friends of Does Are
+{{ friends_content.get('text', '') }}
 </p>
 
 {% end %}

@@ -7,6 +7,12 @@ import tornado.options
 import tornado.web
 from tornado.options import define, options
 import pymongo
+import boto
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+from StringIO import StringIO
+import random
+import string
 
 define("port", default=8000, help="run on the given port", type=int)
 
@@ -28,6 +34,8 @@ class Application(tornado.web.Application):
 				(r"/contact/edit", ContactEditHandler),
 				(r"/friends", FriendsHandler),
 				("/friends/edit", FriendsEditHandler),
+				("/imageupload/(\w+)", ImageUploadHandler),
+				("/imageuploaded", ImageUploadHandler)
 		]
 
 		settings = dict(
@@ -151,12 +159,15 @@ class BandEditHandler(tornado.web.RequestHandler):
 			artist = coll.find_one({"shortname": shortname})
 		for key in artist_fields:
 			artist[key] = self.get_argument(key, None)
-
+		
 		if shortname:
 			coll.save(artist)
 		else:
 			coll.insert(artist)
-		self.redirect("/artists")
+		shortname = artist.get('shortname', '') 
+		imageroute = "/imageupload/"
+		finalroute = imageroute+shortname
+		self.redirect(finalroute)
 
 #render individual band pages
 class ArtistPageHandler(tornado.web.RequestHandler):
@@ -289,6 +300,24 @@ class FriendsEditHandler(tornado.web.RequestHandler):
 
 		coll.save(friends_content)
 		self.redirect("/friends")
+
+class ImageUploadHandler(tornado.web.RequestHandler):
+	def get(self, shortname=None):
+		self.render("imageupload.html", shortname=shortname)
+
+	def post(self):
+		image=self.request.files['image'][0]
+		imagebody=image['body']
+		imagename = image['filename']
+		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W')
+		bucket = conn.create_bucket('doesare_images')
+		k = Key(bucket)
+		k.key = imagename
+		k.set_metadata("Content-Type", "image/jpeg")
+		k.set_contents_from_string(imagebody)
+		k.set_acl('public-read')
+		#k.make_public()
+		self.write("file uploaded for!")
 
 if __name__ == "__main__":
 	tornado.options.parse_command_line()
