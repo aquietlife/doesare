@@ -349,7 +349,7 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		artist = coll.find_one({"shortname": shortname}) #sets artists dict to artist from previous page, which we know is in the database
 		artist['image'] = imagename #sets imagename for artist to name of image uploaded
 		coll.save(artist) #saves artist info back into database
-		self.write("file uploaded for " + shortname) #gives us a confirmation page
+		self.redirect("/artists") #gives us a confirmation page
 
 #boilerplate for starting server
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
+{{ finalpath = "/imageuploaded/" + shortname }}
 <html>
 	<head></head>
 	<body>
 		<div class="form">
 			<p>Upload image for {{ shortname }}</p>
-			{{ finalpath = "/imageuploaded/" + shortname }}
 			<form method="POST" action ={{finalpath}} enctype="multipart/form-data">
 		File: <input type="file" name="image">
 		<br/>
