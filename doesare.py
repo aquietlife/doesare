@@ -35,8 +35,8 @@ class Application(tornado.web.Application):
 				(r"/friends", FriendsHandler),
 				("/friends/edit", FriendsEditHandler),
 				("/imageupload/(\w+)", ImageUploadHandler),
-				("/imageuploaded", ImageUploadHandler)
-		]
+				("/imageuploaded/(\w+)", ImageUploadHandler)
+				]
 
 		settings = dict(
 				template_path = os.path.join(os.path.dirname(__file__), "templates"),
@@ -305,7 +305,10 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 	def get(self, shortname=None):
 		self.render("imageupload.html", shortname=shortname)
 
-	def post(self):
+	def post(self, shortname=None):
+		#shortname = self.get_argument("shortname")
+		artist = dict()
+		coll = self.application.db.artists
 		image=self.request.files['image'][0]
 		imagebody=image['body']
 		imagename = image['filename']
@@ -317,7 +320,11 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		k.set_contents_from_string(imagebody)
 		k.set_acl('public-read')
 		#k.make_public()
-		self.write("file uploaded for!")
+		artist = coll.find_one({"shortname": shortname})
+		print artist
+		artist['image'] = imagename
+		coll.save(artist)
+		self.write("file uploaded for " + shortname)
 
 if __name__ == "__main__":
 	tornado.options.parse_command_line()

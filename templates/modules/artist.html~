@@ -1,7 +1,8 @@
+{{finalimagepath = "https://s3.amazonaws.com/doesare_images/" + artist["image"]}}
 <div class="artist">
 	<h3 class="artist_name"><a href="/artists/{{ artist["shortname"] }}">{{artist["fullname"]}}</a> </h3>
 	<p>Location: {{artist["location"]}}</p>
-	<p>Image: {{ artist["image"] }} </p>
+	<p>Image:<img src={{finalimagepath}}> </p>
 	<p>Description: {{artist["description"]}}</p>
 	<br>
 </div>
