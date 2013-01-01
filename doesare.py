@@ -1,3 +1,18 @@
+#Tornado web server for Does Are
+#Programmed by Johann Diedrick
+#http://johanndiedrick.com
+
+#To do:
+#-simple css design
+#-move mongodb and amazon s3 credentials to secure file
+#-figure out how to render mongodb text as html
+#-get background images
+
+
+
+
+
+#import necessary libraries
 import os.path
 import tornado.httpserver
 import tornado.auth
@@ -14,8 +29,10 @@ from StringIO import StringIO
 import random
 import string
 
+#define global port
 define("port", default=8000, help="run on the given port", type=int)
 
+#set up handlers for routes
 class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
@@ -44,19 +61,21 @@ class Application(tornado.web.Application):
 				ui_modules={"Artist": ArtistModule},
 				debug = True,
 		)
-
+#mongo db configuration
 		conn = pymongo.Connection("mongodb://jdiedrick:Skyl1ne8*@flame.mongohq.com:27078/doesare")
 		self.db = conn["doesare"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
+#main handler, renders news page
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.render(	
-				"index.html",
+				"news.html",
 				page_title = "Does Are | It's a Label",
 				header_text = "Does Are Label Site",
 		)
 
+#news handler, pulls news from mongodb, renders news page
 class NewsHandler (tornado.web.RequestHandler):
 	def get(self):
 		news_content = dict()
@@ -69,6 +88,7 @@ class NewsHandler (tornado.web.RequestHandler):
 				news_content = news_content
 		)
 
+#news edit handler, pulls news from mongodb for editing, and puts new news into mongodb
 class NewsEditHandler(tornado.web.RequestHandler):
 	def get(self):
 		news_content = dict()
@@ -92,6 +112,7 @@ class NewsEditHandler(tornado.web.RequestHandler):
 		coll.save(news_content)
 		self.redirect("/news")
 
+#about handler, gets about text from mongodb, renders about page
 class AboutHandler(tornado.web.RequestHandler):
 	def get(self):
 		about_content = dict()
@@ -104,6 +125,7 @@ class AboutHandler(tornado.web.RequestHandler):
 				about_content = about_content
 		)
 
+#about edit handler, pulls about text from mongodb for editing, and puts new about text into mongodb
 class AboutEditHandler(tornado.web.RequestHandler):
 	def get(self):
 		about_content = dict()
@@ -127,7 +149,7 @@ class AboutEditHandler(tornado.web.RequestHandler):
 		coll.save(about_content)
 		self.redirect("/about")
 
-
+#artist handler, gets artists from mongodb and renders artists page
 class ArtistsHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll=self.application.db.artists
@@ -139,7 +161,7 @@ class ArtistsHandler(tornado.web.RequestHandler):
 				artists = artists
 		)
 	
-
+#band edit handler, pulls text from individual artist page from mongo db for editing
 class BandEditHandler(tornado.web.RequestHandler):
 	def get(self, shortname=None):
 		artist = dict()
@@ -150,7 +172,8 @@ class BandEditHandler(tornado.web.RequestHandler):
 				page_title="Does Are | Band",
 				header_text = "Edit band",
 				artist=artist)
-	
+
+#post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, shortname=None):
 		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video']
 		coll = self.application.db.artists
@@ -181,7 +204,7 @@ class ArtistPageHandler(tornado.web.RequestHandler):
 				header_text = "Band Page",
 				artist=artist)
 
-
+#module for indivual artist
 class ArtistModule(tornado.web.UIModule):
 	def render(self, artist):
 		return self.render_string(
@@ -195,6 +218,7 @@ class ArtistModule(tornado.web.UIModule):
 	def javascript_files(self):
 		return "/static/js/recommended.js"
 
+#shop handler, gets shop text from db, renders shop page
 class ShopHandler(tornado.web.RequestHandler):
 	def get(self):
 		shop_content = dict()
@@ -207,6 +231,7 @@ class ShopHandler(tornado.web.RequestHandler):
 				shop_content = shop_content
 		)
 
+#shop edit handler, gets shop text from db to edit, updates db with new shop text
 class ShopEditHandler(tornado.web.RequestHandler):
 	def get(self):
 		shop_content = dict()
@@ -230,6 +255,7 @@ class ShopEditHandler(tornado.web.RequestHandler):
 		coll.save(shop_content)
 		self.redirect("/shop")
 
+#contact handler, gets contact text from db, renders contact page
 class ContactHandler(tornado.web.RequestHandler):
 	def get(self):
 		contact_content = dict()
@@ -241,7 +267,7 @@ class ContactHandler(tornado.web.RequestHandler):
 				contact_content = contact_content
 		)
 
-
+#contact edit handler, gets contact text from db, updates db with new contact text
 class ContactEditHandler(tornado.web.RequestHandler):
 	def get(self):
 		contact_content = dict()
@@ -265,7 +291,7 @@ class ContactEditHandler(tornado.web.RequestHandler):
 		coll.save(contact_content)
 		self.redirect("/contact")
 
-
+#friends handler, gets friends text from db, renders friends page
 class FriendsHandler(tornado.web.RequestHandler):
 	def get(self):
 		friends_content = dict()
@@ -278,6 +304,7 @@ class FriendsHandler(tornado.web.RequestHandler):
 				friends_content = friends_content
 		)
 
+#friends edit handler, gets friends text from db, updates db with new friends text
 class FriendsEditHandler(tornado.web.RequestHandler):
 	def get(self):
 		friends_content = dict()
@@ -301,31 +328,30 @@ class FriendsEditHandler(tornado.web.RequestHandler):
 		coll.save(friends_content)
 		self.redirect("/friends")
 
+#image upload handler, renders upload form for particular artist, uploads an image for that artist to amazon s3 and saves location in db for that artist
 class ImageUploadHandler(tornado.web.RequestHandler):
 	def get(self, shortname=None):
 		self.render("imageupload.html", shortname=shortname)
 
 	def post(self, shortname=None):
-		#shortname = self.get_argument("shortname")
-		artist = dict()
-		coll = self.application.db.artists
-		image=self.request.files['image'][0]
-		imagebody=image['body']
-		imagename = image['filename']
-		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W')
-		bucket = conn.create_bucket('doesare_images')
-		k = Key(bucket)
-		k.key = imagename
-		k.set_metadata("Content-Type", "image/jpeg")
-		k.set_contents_from_string(imagebody)
-		k.set_acl('public-read')
-		#k.make_public()
-		artist = coll.find_one({"shortname": shortname})
-		print artist
-		artist['image'] = imagename
-		coll.save(artist)
-		self.write("file uploaded for " + shortname)
+		artist = dict() #empty dict for artist
+		coll = self.application.db.artists # collection of artists
+		image=self.request.files['image'][0] #image post data from form
+		imagebody=image['body'] #body of image file
+		imagename = image['filename'] #image name and path
+		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W') #amazon s3 connection
+		bucket = conn.create_bucket('doesare_images') #bucket for images
+		k = Key(bucket) #key associated with image
+		k.key = imagename #sets key to image name
+		k.set_metadata("Content-Type", "image/jpeg") #sets metadata for image/jpeg
+		k.set_contents_from_string(imagebody) #puts image data into s3 bucket
+		k.set_acl('public-read') #makes image public 
+		artist = coll.find_one({"shortname": shortname}) #sets artists dict to artist from previous page, which we know is in the database
+		artist['image'] = imagename #sets imagename for artist to name of image uploaded
+		coll.save(artist) #saves artist info back into database
+		self.write("file uploaded for " + shortname) #gives us a confirmation page
 
+#boilerplate for starting server
 if __name__ == "__main__":
 	tornado.options.parse_command_line()
 	http_server = tornado.httpserver.HTTPServer(Application())
