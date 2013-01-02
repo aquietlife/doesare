@@ -1,0 +1,13 @@
+<html>
+	<head></head>
+	<body>
+		<p>Are you sure you want to delete {{name}} ?</p>
+		<form method="POST" action="/deleteartist/{{name}}">
+		<input type="submit" value="Yes">
+		</form>
+		<form method="GET" action="/artists">
+		<input type="submit" value="No">
+		</form>
+	</body>
+</html>
+

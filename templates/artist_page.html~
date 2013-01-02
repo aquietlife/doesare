@@ -4,7 +4,7 @@
 {% block body %}
 	<p>name: {{ artist.get('fullname', '') }}</p>
 	<br>
-	<p>image: {{ artist.get('image', '') }}</p>
+	<p>image: <img src="https://s3.amazonaws.com/doesare_images/{{ artist.get('image', '') }}"</img></p>
 	<br>
 	<p>description: {{ artist.get('description', '') }}</p>
 	<br>
@@ -15,5 +15,5 @@
 	<p>contact info: {{ artist.get('contactinfo', '') }}</p>
 	<br>
 	<br>
-	<p><a href="/edit/{{artist.get('shortname', '')}}">edit this page</a></p>
+	<p><a href="/edit/{{artist.get('shortname', '')}}">Edit</a> | <a href="/deleteartist/{{artist.get('shortname', '')}}">Delete</a></p>
 {% end %}

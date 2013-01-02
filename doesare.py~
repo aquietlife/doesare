@@ -5,7 +5,6 @@
 #To do:
 #-simple css design
 #-move mongodb and amazon s3 credentials to secure file
-#-figure out how to render mongodb text as html
 #-get background images
 #-set up auth for back-end editing pages
 #-make a page to delete artists
@@ -44,6 +43,7 @@ class Application(tornado.web.Application):
 				(r"/about/edit", AboutEditHandler),
 				(r"/artists", ArtistsHandler),
 				(r"/edit/(\w+)", BandEditHandler),
+				(r"/deleteartist/(\w+)", DeleteArtistHandler),
 				(r"/add", BandEditHandler),
 				(r"/artists/(\w+)", ArtistPageHandler),
 				(r"/shop", ShopHandler),
@@ -192,6 +192,20 @@ class BandEditHandler(tornado.web.RequestHandler):
 		imageroute = "/imageupload/"
 		finalroute = imageroute+shortname
 		self.redirect(finalroute)
+
+#delete artst handle, removes artist from database
+class DeleteArtistHandler(tornado.web.RequestHandler):
+	def get(self, name=None):
+
+		self.render("deleteconfirm.html", 
+				name = name)
+	def post(self, name=None):
+		coll = self.application.db.artists
+		artist = dict()
+		if name:
+			artist = coll.find_one({"shortname": name})
+			coll.remove(artist)
+		self.write("deleted " + name)
 
 #render individual band pages
 class ArtistPageHandler(tornado.web.RequestHandler):
