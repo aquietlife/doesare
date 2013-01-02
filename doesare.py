@@ -7,7 +7,8 @@
 #-move mongodb and amazon s3 credentials to secure file
 #-figure out how to render mongodb text as html
 #-get background images
-
+#-set up auth for back-end editing pages
+#-make a page to delete artists
 
 
 
