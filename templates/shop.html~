@@ -1,9 +1,9 @@
 {% extends "main.html" %}
 
 {% block body %}
-
+{% autoescape None %}
 <p>
-Shop for Does Are.
+{{ shop_content.get('text', '') }}
 </p>
 
 {% end %}

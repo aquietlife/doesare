@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block body %}
-
+{% autoescape None %}
 <p>
 {{ shop_content.get('text', '') }}
 </p>
