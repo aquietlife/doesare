@@ -72,11 +72,7 @@ class Application(tornado.web.Application):
 #main handler, renders news page
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
-		self.render(	
-				"news.html",
-				page_title = "Does Are | It's a Label",
-				header_text = "Does Are Label Site",
-		)
+		self.redirect("/news")
 
 #news handler, pulls news from mongodb, renders news page
 class NewsHandler (tornado.web.RequestHandler):
