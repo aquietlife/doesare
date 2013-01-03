@@ -3,9 +3,9 @@
 
 {% block body %}
 <form method="POST">
-	Text <input type="text" name="text"
-	value="{{ news_content.get('text', '') }}"></br>
 
+	Text <TEXTAREA  COLS="40" ROWS="6"  name="text">
+		{{ news_content.get('text', '') }}</TEXTAREA></br>
 	<input type="submit" value="Save">
 </form>
 {% end %}
