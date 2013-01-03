@@ -19,10 +19,11 @@
 	value="{{ artist.get('location', '') }}"></br>
 
 	Description: <input type="text" name="description"
-	value="{{ artist.get('description', '') }}"</br>
+	value="{{ artist.get('description', '') }}"></br>
+	
+	Links:  <TEXTAREA COLS="40" ROWS="6" type="text" name="link">
+	{{  artist.get('link', '') }}"></TEXTAREA></br>
 
-	Link:  <input type="text" name="link"
-	value="{{ artist.get('link', '') }}"></br>
 
 	Releases:  <input type="text" name="releases"
 	value="{{ artist.get('releases', '') }}"></br>

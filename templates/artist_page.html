@@ -16,7 +16,7 @@
 	<br>
 	<p>contact info: {{ artist.get('contactinfo', '') }}</p>
 	<br>
-	<p>link: <a href="{{artist.get('link', '') }}"</a>External Link</a>
+	<p>Links: {{artist.get('link', '') }}</p>
 	<br>
 	<br>
 	<p><a href="/edit/{{artist.get('shortname', '')}}">Edit</a> | <a href="/deleteartist/{{artist.get('shortname', '')}}">Delete</a></p>
