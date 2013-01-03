@@ -8,7 +8,8 @@
 		File: <input type="file" name="image">
 		<br/>
 <input type="submit" value="Upload">
-</form> 
+</form>
+<p><a href="/artists">Skip</a>
 </div> 
 </body>
 </html>

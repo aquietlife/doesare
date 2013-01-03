@@ -52,6 +52,8 @@ class Application(tornado.web.Application):
 				(r"/contact/edit", ContactEditHandler),
 				(r"/friends", FriendsHandler),
 				("/friends/edit", FriendsEditHandler),
+				(r"/info", InfoHandler),
+				(r"/info/edit", InfoEditHandler),
 				("/imageupload/(\w+)", ImageUploadHandler),
 				("/imageuploaded/(\w+)", ImageUploadHandler)
 				]
@@ -318,6 +320,41 @@ class FriendsHandler(tornado.web.RequestHandler):
 				header_text = "Friends",
 				friends_content = friends_content
 		)
+
+class InfoHandler(tornado.web.RequestHandler):
+	def get(self):
+		info_content = dict()
+		coll = self.application.db.info
+		info_content = coll.find_one({"name": "info"})
+		
+		self.render("info.html",
+				page_title = "Does Are | Info",
+				header_text = "Info",
+				info_content = info_content
+				)
+
+class InfoEditHandler(tornado.web.RequestHandler):
+	def get(self):
+		info_content = dict()
+		coll = self.application.db.info
+		info_content = coll.find_one({"name": "info"})
+		self.render(
+				"info_edit.html",
+				page_title = "Does Are | Edit the Info Page",
+				header_text = "Edit the Info Page",
+				info_content = info_content		
+		)
+
+	def post(self):
+		info_field = ['text']
+		coll = self.application.db.info
+		info_content = dict()
+		info_content = coll.find_one({"name": "info"})
+		for key in info_field:
+			info_content[key] = self.get_argument(key, None)
+
+		coll.save(info_content)
+		self.redirect("/info")
 
 #friends edit handler, gets friends text from db, updates db with new friends text
 class FriendsEditHandler(tornado.web.RequestHandler):
