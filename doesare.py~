@@ -176,7 +176,7 @@ class BandEditHandler(tornado.web.RequestHandler):
 
 #post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, shortname=None):
-		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video']
+		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video', 'pastshows']
 		coll = self.application.db.artists
 		artist = dict()
 		if shortname:

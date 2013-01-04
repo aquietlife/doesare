@@ -22,7 +22,7 @@
 	value="{{ artist.get('description', '') }}"></br>
 	
 	Links:  <TEXTAREA COLS="40" ROWS="6" type="text" name="link">
-	{{  artist.get('link', '') }}"></TEXTAREA></br>
+	{{  artist.get('link', '') }}"</TEXTAREA></br>
 
 
 	Releases:  <input type="text" name="releases"
@@ -44,8 +44,10 @@
 	value="{{ artist.get('song3', '') }}"></br>
 
 	Video: <input type="text" name="video"
-	value="{{ artist.get('video', '') }}"</br>
-
+	value="{{ artist.get('video', '') }}"></br>
+	
+	Past Shows: <TEXTAREA COLS="40" ROWS="6" type="text" name="pastshows">
+		{{ artist.get('pastshows', '')}}</TEXTAREA></br>
 	<input type="submit" value="Save">
 </form>
 {% end %}

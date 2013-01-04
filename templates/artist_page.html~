@@ -20,6 +20,7 @@
 	<br>
 	<p>Links: {{artist.get('link', '') }}</p>
 	<br>
+	<p>Past Shows: {{artist.get('pastshows', '') }}</p>
 	<br>
 	<p><a href="/edit/{{artist.get('shortname', '')}}">Edit</a> | <a href="/deleteartist/{{artist.get('shortname', '')}}">Delete</a></p>
 {% end %}
