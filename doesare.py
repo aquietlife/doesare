@@ -54,14 +54,16 @@ class Application(tornado.web.Application):
 				("/friends/edit", FriendsEditHandler),
 				(r"/info", InfoHandler),
 				(r"/info/edit", InfoEditHandler),
-				("/imageupload/(\w+)", ImageUploadHandler),
-				("/imageuploaded/(\w+)", ImageUploadHandler)
+				(r"/imageupload/(\w+)", ImageUploadHandler),
+				(r"/imageuploaded/(\w+)", ImageUploadHandler),
+				(r"/shows", ShowsHandler)
+				
 				]
 
 		settings = dict(
 				template_path = os.path.join(os.path.dirname(__file__), "templates"),
 				static_path = os.path.join(os.path.dirname(__file__), "static"),
-				ui_modules={"Artist": ArtistModule},
+				ui_modules={"Artist": ArtistModule, "Show": ShowModule},
 				debug = True,
 		)
 #mongo db configuration
@@ -217,7 +219,7 @@ class ArtistPageHandler(tornado.web.RequestHandler):
 				header_text = "Band Page",
 				artist=artist)
 
-#module for indivual artist
+#module for individual artist
 class ArtistModule(tornado.web.UIModule):
 	def render(self, artist):
 		return self.render_string(
@@ -398,6 +400,24 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		artist['image'] = imagename #sets imagename for artist to name of image uploaded
 		coll.save(artist) #saves artist info back into database
 		self.redirect("/artists") #gives us a confirmation page
+
+class ShowsHandler(tornado.web.RequestHandler):
+	def get(self):
+		self.write("shows to come")
+
+#module for individual artist
+class ShowModule(tornado.web.UIModule):
+	def render(self, show):
+		return self.render_string(
+				"modules/show.html",
+				show=show,
+		)
+	
+	def css_files(self):
+		return "/static/css/recommended.css"
+
+	def javascript_files(self):
+		return "/static/js/recommended.js"
 
 #boilerplate for starting server
 if __name__ == "__main__":

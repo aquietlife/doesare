@@ -10,7 +10,7 @@
 	<br>
 	<p>description: {{ artist.get('description', '') }}</p>
 	<br>
-	<p>releases: {{ artist.get('releases', '') }}</p>
+	<p>releases:<i> {{ artist.get('releases', '') }} </i></p>
 	<!--
 	<br>
 	<p>tourdates: {{ artist.get('tourdates', '') }}</p>

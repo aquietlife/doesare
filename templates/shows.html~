@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+<h2>Shows</h2>
+	{% for show in shows %}
+		{% module Show(show) %}
+	{% end %}
+{% end %}
