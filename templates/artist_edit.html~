@@ -22,7 +22,7 @@
 	value="{{ artist.get('description', '') }}"></br>
 	
 	Links:  <TEXTAREA COLS="40" ROWS="6" type="text" name="link">
-	{{  artist.get('link', '') }}"</TEXTAREA></br>
+	{{  artist.get('link', '') }}</TEXTAREA></br>
 
 
 	Releases:  <input type="text" name="releases"
