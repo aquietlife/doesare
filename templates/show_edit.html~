@@ -1,0 +1,38 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+<form method="POST">
+	Select Artist: <select name="artists">
+		{% for artist in allartists%}
+			<option>{{artist.get('fullname', '')}}</option>
+		{% end %}
+	</select>
+	<br>
+	Date: <input type="date" name="date"
+	value="{{ show.get('date', '') }}"></br>
+
+	Venue <input type="text" name="venue"
+	value="{{ show.get('venue', '') }}"></br>
+
+	Location: <input type="text" name="location"
+	value="{{ show.get('location', '') }}"></br>
+
+	Time: <input type="time" name="description"
+	value="{{ show.get('description', '') }}"></br>
+	
+	Address:  <input  type="text" name="address"
+	value="{{  show.get('address', '') }}"></br>
+
+	Playing with::  <input type="text" name="playingwith"
+	value="{{ show.get('playingwith', '') }}"></br>
+
+	Description: <TEXTAREA COLS="40" ROWS="6" type="text" name="description">
+	{{ show.get('description', '')}}</TEXTAREA></br>
+
+	Share Links: <TEXTAREA COLS="40" ROWS="6" type="text" name="share">
+	{{ show.get('share', '')}}</TEXTAREA></br>
+
+	<input type="submit" value="Save">
+</form>
+{% end %}
