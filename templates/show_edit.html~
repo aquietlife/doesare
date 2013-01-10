@@ -3,9 +3,9 @@
 
 {% block body %}
 <form method="POST">
-	Select Artist: <select name="artists">
+	Select Artist: <select name="artist">
 		{% for artist in allartists%}
-			<option>{{artist.get('fullname', '')}}</option>
+		<option value="{{artist.get('shortname', '')}}">{{artist.get('fullname', '')}}</option>
 		{% end %}
 	</select>
 	<br>
@@ -18,7 +18,7 @@
 	Location: <input type="text" name="location"
 	value="{{ show.get('location', '') }}"></br>
 
-	Time: <input type="time" name="description"
+	Time: <input type="time" name="time"
 	value="{{ show.get('description', '') }}"></br>
 	
 	Address:  <input  type="text" name="address"

@@ -1,5 +1,33 @@
+
+html{
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+
 p{
 
 	font-family: "Arial";
-	font-size: 20px;
+	font-size: 12px;
+}
+
+div#logo{
+	padding: 10px;
+	margin: 10px;
+}
+div#nav{
+	width: 100%x;
+	background-color: #FFFFFF;
+	display: inline-table;
+	padding: 10px;
+	margin: 10px;
+}
+
+div#content{
+	width:auto;
+	background-color: #FFFFFF;
+	display: inline-table;
+	padding: 10px;
+	margin: 10px;
 }

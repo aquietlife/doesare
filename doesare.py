@@ -404,8 +404,20 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 
 class ShowsHandler(tornado.web.RequestHandler):
 	def get(self):
-		self.write("shows to come")
+		coll=self.application.db.shows
+		shows = coll.find()
+		self.render(
+				"shows.html",
+				page_title = "Does Are | Shows",
+				header_text = "Shows",
+				shows = shows
+		)
+			
 
+
+
+	
+	
 #show edit handler, allows for adding a new show  or editing an upcoming one
 class ShowEditHandler(tornado.web.RequestHandler):
 	def get(self, shortname=None):
@@ -423,23 +435,21 @@ class ShowEditHandler(tornado.web.RequestHandler):
 
 #post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, shortname=None):
-		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video', 'pastshows']
-		coll = self.application.db.artists
-		artist = dict()
+		show_fields = ['artist', 'date', 'venue', 'location', 'time', 'address','playingwith', 'description', 'sharelinks']
+		coll = self.application.db.shows
+		show = dict()
 		if shortname:
-			artist = coll.find_one({"shortname": shortname})
-		for key in artist_fields:
-			artist[key] = self.get_argument(key, None)
+			show = coll.find_one({"shortname": shortname})
+		for key in show_fields:
+			show[key] = self.get_argument(key, None)
 		
 		if shortname:
-			coll.save(artist)
+			coll.save(show)
 		else:
-			coll.insert(artist)
-		shortname = artist.get('shortname', '') 
-		imageroute = "/imageupload/"
-		finalroute = imageroute+shortname
-		self.redirect(finalroute)
-#module for individual artist
+			coll.insert(show)
+		self.write("show added!")
+
+#module for individual show
 class ShowModule(tornado.web.UIModule):
 	def render(self, show):
 		return self.render_string(
