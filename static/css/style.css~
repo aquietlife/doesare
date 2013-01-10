@@ -40,6 +40,11 @@ div#footer{
 	margin: 10px;
 }
 
+div#social{
+	width:auto;
+	background-color:rgba(0,0,0,0);
+	margin: 10px;
+}
 a{
 	text-decoration: none;
 }

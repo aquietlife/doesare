@@ -23,14 +23,10 @@
 					{% block body %}{% end %}
 				</div>
 			</div>
-			<footer>
-				{% block footer %}
-				<div id="footer">
-				<p>Does Are | <a href="http://www.facebook.com/Tonstartssbandht">FB</a> | <a href="http://www.twitter.com/doesare">Twitter</a></p>
-				</div>
-				{% end %}
-			</footer>
-		</div>
+			<div id="social">
+				<p><a href="https://twitter.com/doesare"><img width="25px" src="{{static_url("images/social/twitter.png") }}"></a>  <a href="https://www.facebook.com/Tonstartssbandht"><img width="25px" src="{{static_url("images/social/facebook.png") }}"></a></p>
+			</div>
+			</div>
 		<script src=" {{ static_url("js/scripts.js") }} "></script>
 	</body>
 </html>

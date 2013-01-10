@@ -407,7 +407,7 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 class ShowsHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll=self.application.db.shows
-		shows = coll.find().sort("date", ASCENDING)
+		shows = coll.find().sort("artist", DESCENDING).sort("date", ASCENDING)
 		self.render(
 				"shows.html",
 				page_title = "Does Are | Shows",
