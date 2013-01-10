@@ -22,6 +22,8 @@ import tornado.options
 import tornado.web
 from tornado.options import define, options
 import pymongo
+from pymongo import ASCENDING, DESCENDING
+from bson.objectid import ObjectId
 import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
@@ -57,8 +59,8 @@ class Application(tornado.web.Application):
 				(r"/imageupload/(\w+)", ImageUploadHandler),
 				(r"/imageuploaded/(\w+)", ImageUploadHandler),
 				(r"/shows", ShowsHandler),
-				(r"/addshow", ShowEditHandler)
-				
+				(r"/addshow", ShowEditHandler),
+				(r"/show/(\w+)", ShowPageHandler)	
 				]
 
 		settings = dict(
@@ -405,7 +407,7 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 class ShowsHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll=self.application.db.shows
-		shows = coll.find()
+		shows = coll.find().sort("date", ASCENDING)
 		self.render(
 				"shows.html",
 				page_title = "Does Are | Shows",
@@ -447,7 +449,20 @@ class ShowEditHandler(tornado.web.RequestHandler):
 			coll.save(show)
 		else:
 			coll.insert(show)
-		self.write("show added!")
+		self.redirect("/shows")
+
+
+#render individual band pages
+class ShowPageHandler(tornado.web.RequestHandler):
+	def get(self, showid=None):
+		show = dict()
+		if showid:
+			coll = self.application.db.shows
+			show = coll.find_one({"_id": ObjectId(showid)})
+		self.render("show_page.html",
+				page_title="Does Are | Band Page",
+				header_text = "Show Page",
+				show=show)
 
 #module for individual show
 class ShowModule(tornado.web.UIModule):

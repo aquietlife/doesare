@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+	<p>{{ show.get('artist', '') }}</p>
+	<p><b>Date</b><br> {{ show.get('date', '') }}</p>
+	<p><b>Description</b><br> {{ show.get('location', '') }}</p>
+	<p><b>Releases</b><br><i> {{ show.get('venue', '') }} </i></p>
+	<p><b>Contact</b><br> {{ show.get('time', '') }}</p>
+{% end %}
