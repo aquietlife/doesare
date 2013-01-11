@@ -409,17 +409,22 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 
 class ShowsHandler(tornado.web.RequestHandler):
 	def get(self):
+		allartists=self.application.db.artists
 		coll=self.application.db.shows
 		individual_artists=set()
 		artistsshows = dict()
 		finalHTML = ""
-		
+		fullname=""
 		for show in coll.find():
 			individual_artists.add(show['artist'])
 
+
 		for artist in individual_artists:
+			#find full name
+			#artistindb=""
+			artistindb = allartists.find_one({"shortname": artist})
 			finalHTML = finalHTML + "<b>"
-			finalHTML = finalHTML + artist 
+			finalHTML = finalHTML + artistindb['fullname']
 			finalHTML = finalHTML + "</b>"
 			finalHTML = finalHTML + "<br>"
 			for artistshow in coll.find({"artist": artist}).sort("date", ASCENDING):
