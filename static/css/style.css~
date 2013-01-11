@@ -49,6 +49,9 @@ a{
 	text-decoration: none;
 }
 
+h2{
+	font-family: "Arial";
+}
 a:link{
 	color: #000000;
 }

@@ -2,7 +2,7 @@
 	<head></head>
 	<body>
 		<p>Are you sure you want to delete {{showid}} ?</p>
-		<form method="POST" action="/deleteartist/{{showid}}">
+		<form method="POST" action="/deleteshow/{{showid}}">
 		<input type="submit" value="Yes">
 		</form>
 		<form method="GET" action="/shows">

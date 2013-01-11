@@ -15,7 +15,7 @@
 		</div>
 			<div id="nav">
 				<p>
-				<a href="/news">News</a> | <a href="/shop">Shop</a> | <a href="/artists">Artists</a> | <!--<a href="/discography">Discography</a> |--><!--  <a href="/shows">Shows</a> |--> <a href="/friends">Friends</a> | <a href="/info">Info</a>
+				<a href="/news">News</a> | <a href="/shop">Shop</a> | <a href="/artists">Artists</a> | <!--<a href="/discography">Discography</a> |--><a href="/shows">Shows</a> | <a href="/friends">Friends</a> | <a href="/info">Info</a>
 				</p>
 			</div>
 			<div id="main">
