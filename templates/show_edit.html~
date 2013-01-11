@@ -7,6 +7,7 @@
 		{% for artist in allartists%}
 		<option value="{{artist.get('shortname', '')}}">{{artist.get('fullname', '')}}</option>
 		{% end %}
+		<option value="Jerry Paper">Jerry Paper</option>
 	</select>
 	<br>
 	Date: <input type="date" name="date"
@@ -31,7 +32,7 @@
 	{{ show.get('description', '')}}</TEXTAREA></br>
 
 	Share Links: <TEXTAREA COLS="40" ROWS="6" type="text" name="share">
-	{{ show.get('share', '')}}</TEXTAREA></br>
+	{{ show.get('sharelinks', '')}}</TEXTAREA></br>
 
 	<input type="submit" value="Save">
 </form>
