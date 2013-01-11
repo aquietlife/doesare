@@ -1,0 +1,13 @@
+<html>
+	<head></head>
+	<body>
+		<p>Are you sure you want to delete {{showid}} ?</p>
+		<form method="POST" action="/deleteshow/{{showid}}">
+		<input type="submit" value="Yes">
+		</form>
+		<form method="GET" action="/shows">
+		<input type="submit" value="No">
+		</form>
+	</body>
+</html>
+

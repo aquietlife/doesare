@@ -11,7 +11,7 @@
 	<body>
 		<div id="container">
 			<div id="logo">
-				<a href="/"><img src="{{ static_url("images/doesare_logo_trans.png") }}"></img></a>
+				<a href="/"><img src="{{ static_url("images/doesare_logo_trans_text.png") }}"></img></a>
 		</div>
 			<div id="nav">
 				<p>

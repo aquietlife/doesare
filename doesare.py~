@@ -60,7 +60,10 @@ class Application(tornado.web.Application):
 				(r"/imageuploaded/(\w+)", ImageUploadHandler),
 				(r"/shows", ShowsHandler),
 				(r"/addshow", ShowEditHandler),
-				(r"/show/(\w+)", ShowPageHandler)	
+				(r"/show/(\w+)", ShowPageHandler),
+				(r"/editshow/(\w+)", ShowEditHandler),
+				(r"/deleteshow/(\w+)", DeleteShowHandler)
+				
 				]
 
 		settings = dict(
@@ -407,25 +410,67 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 class ShowsHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll=self.application.db.shows
-		shows = coll.find().sort("artist", DESCENDING).sort("date", ASCENDING)
+		individual_artists=set()
+		artistsshows = dict()
+		finalHTML = ""
+		
+		for show in coll.find():
+			individual_artists.add(show['artist'])
+
+		for artist in individual_artists:
+			finalHTML = finalHTML + "<b>"
+			finalHTML = finalHTML + artist 
+			finalHTML = finalHTML + "</b>"
+			finalHTML = finalHTML + "<br>"
+			for artistshow in coll.find({"artist": artist}).sort("date", ASCENDING):
+				finalHTML = finalHTML + artistshow['date']
+				finalHTML = finalHTML + " | "
+				finalHTML = finalHTML + artistshow['location']
+				finalHTML = finalHTML + " | "
+				finalHTML = finalHTML + artistshow['venue']
+				finalHTML = finalHTML + " | "
+				finalHTML = finalHTML + artistshow['time']
+				finalHTML = finalHTML + " | "
+				finalHTML = finalHTML + "<a href=/show/"
+				finalHTML = finalHTML + str(artistshow['_id']) 
+				finalHTML = finalHTML + ">More details</a>"
+				finalHTML = finalHTML + "<br>"
+			finalHTML = finalHTML+"<br>"
+		
 		self.render(
-				"shows.html",
+				"shows_new.html",
 				page_title = "Does Are | Shows",
 				header_text = "Shows",
-				shows = shows
-		)
+				finalHTML = finalHTML
+				)
 			
 
+#class ShowsHandler(tornado.web.RequestHandler):
+#	def get(self):
+#		coll=self.application.db.shows
+#		shows = coll.find().sort("date", ASCENDING)
+#		
+#		
+#		self.render(
+#				"shows.html",
+#				page_title = "Does Are | Shows",
+#				header_text = "Shows",
+#				shows = shows
+#		)
 
 
 	
 	
 #show edit handler, allows for adding a new show  or editing an upcoming one
 class ShowEditHandler(tornado.web.RequestHandler):
-	def get(self, shortname=None):
+	def get(self, showid=None):
 		allartists=dict()
 		show = dict()
 
+
+		if showid:
+			coll = self.application.db.shows
+			show = coll.find_one({"_id": ObjectId(showid)})
 		coll=self.application.db.artists
 		allartists = coll.find()
 		self.render("show_edit.html",
@@ -436,16 +481,16 @@ class ShowEditHandler(tornado.web.RequestHandler):
 				)
 
 #post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
-	def post(self, shortname=None):
+	def post(self, showid=None):
 		show_fields = ['artist', 'date', 'venue', 'location', 'time', 'address','playingwith', 'description', 'sharelinks']
 		coll = self.application.db.shows
 		show = dict()
-		if shortname:
-			show = coll.find_one({"shortname": shortname})
+		if showid:
+			show = coll.find_one({"_id": ObjectId(showid)})
 		for key in show_fields:
 			show[key] = self.get_argument(key, None)
 		
-		if shortname:
+		if showid:
 			coll.save(show)
 		else:
 			coll.insert(show)
@@ -464,6 +509,20 @@ class ShowPageHandler(tornado.web.RequestHandler):
 				header_text = "Show Page",
 				show=show)
 
+
+#delete show handle, removes show from database
+class DeleteShowHandler(tornado.web.RequestHandler):
+	def get(self, showid=None):
+
+		self.render("deleteshowconfirm.html", 
+				showid = showid)
+	def post(self, showid=None):
+		coll = self.application.db.shows
+		show = dict()
+		if showid:
+			show = coll.find_one({"_id": ObjectId(showid)})
+			coll.remove(show)
+		self.redirect("/shows")
 #module for individual show
 class ShowModule(tornado.web.UIModule):
 	def render(self, show):
