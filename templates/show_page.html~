@@ -2,13 +2,13 @@
 {% autoescape None %}
 
 {% block body %}
-	<p>{{ show.get('artist', '') }}</p>
+<p><b>{{ artistfullname }}</b></p>
 	<p><b>Date</b><br> {{ show.get('date', '') }}</p>
 	<p><b>Location</b><br>{{ show.get('location', '') }}</p>
 	<p><b>Venue</b><br>{{ show.get('venue', '') }} </p>
 	<p><b>Address</b><br>{{ show.get('address', '')}}</p>
 	<p><b>Time</b><br> {{ show.get('time', '') }}</p>
-	<p><b>Playing With</b><br>{{ show.get('playingwith', '')}}</p>i
-	<p><b>Description</b><br>{{ show.get('description', '')}}</p>i
+	<p><b>Playing With</b><br>{{ show.get('playingwith', '')}}</p>
+	<p><b>Description</b><br>{{ show.get('description', '')}}</p>
 	<p> <a href="/deleteshow/{{show.get('_id', '')}}">Delete</a> | <a href="/editshow/{{show.get('_id', '')}}">Edit</a> </p>
 {% end %}

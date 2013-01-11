@@ -506,13 +506,21 @@ class ShowEditHandler(tornado.web.RequestHandler):
 class ShowPageHandler(tornado.web.RequestHandler):
 	def get(self, showid=None):
 		show = dict()
+		artist = dict()
+		artistsindb = self.application.db.artists
+		
 		if showid:
 			coll = self.application.db.shows
 			show = coll.find_one({"_id": ObjectId(showid)})
+		
+		shortname = show['artist']
+		artistfullname = artistsindb.find_one({"shortname": shortname})['fullname']
 		self.render("show_page.html",
 				page_title="Does Are | Band Page",
 				header_text = "Show Page",
-				show=show)
+				show=show,
+				artistfullname = artistfullname
+				)
 
 
 #delete show handle, removes show from database
