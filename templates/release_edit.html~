@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+<form method="POST">
+	Select Artist: <select name="artist">
+		{% for artist in allartists%}
+		<option value="{{artist.get('shortname', '')}}">{{artist.get('fullname', '')}}</option>
+		{% end %}
+	</select>
+	<br>
+	Title: <input type="text" name="title"
+	value="{{ release.get('title', '') }}"></br>
+
+	Image: <input type="text" name="image"
+	value="{{ release.get('image', '') }}"></br>
+	
+	Catalog Number: <input type="text" name="catnum"
+	value="{{ release.get('catnum', '') }}"></br>
+
+	Release Date: <input type="date" name="date"
+	value="{{ release.get('date', '') }}"></br>
+
+	Description: <TEXTAREA COLS="40" ROWS="6" type="text" name="description">
+	{{ release.get('description', '')}}</TEXTAREA></br>
+
+
+	<input type="submit" value="Save">
+</form>
+{% end %}

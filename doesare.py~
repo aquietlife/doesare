@@ -62,14 +62,16 @@ class Application(tornado.web.Application):
 				(r"/addshow", ShowEditHandler),
 				(r"/show/(\w+)", ShowPageHandler),
 				(r"/editshow/(\w+)", ShowEditHandler),
-				(r"/deleteshow/(\w+)", DeleteShowHandler)
+				(r"/deleteshow/(\w+)", DeleteShowHandler),
+				(r"/discography", ReleasesHandler),
+				(r"/addrelease", ReleaseEditHandler)
 				
 				]
 
 		settings = dict(
 				template_path = os.path.join(os.path.dirname(__file__), "templates"),
 				static_path = os.path.join(os.path.dirname(__file__), "static"),
-				ui_modules={"Artist": ArtistModule, "Show": ShowModule},
+				ui_modules={"Artist": ArtistModule, "Show": ShowModule, "Release": ReleaseModule},
 				debug = True,
 		)
 #mongo db configuration
@@ -182,7 +184,7 @@ class BandEditHandler(tornado.web.RequestHandler):
 
 #post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, shortname=None):
-		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'song1', 'song2', 'song3', 'video', 'pastshows']
+		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'videos', 'pastshows']
 		coll = self.application.db.artists
 		artist = dict()
 		if shortname:
@@ -463,7 +465,6 @@ class ShowsHandler(tornado.web.RequestHandler):
 #				shows = shows
 #		)
 
-
 	
 	
 #show edit handler, allows for adding a new show  or editing an upcoming one
@@ -485,7 +486,7 @@ class ShowEditHandler(tornado.web.RequestHandler):
 				allartists=allartists
 				)
 
-#post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
+#post handler for editing shows, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, showid=None):
 		show_fields = ['artist', 'date', 'venue', 'location', 'time', 'address','playingwith', 'description', 'sharelinks']
 		coll = self.application.db.shows
@@ -549,6 +550,69 @@ class ShowModule(tornado.web.UIModule):
 
 	def javascript_files(self):
 		return "/static/js/recommended.js"
+
+
+class ReleasesHandler(tornado.web.RequestHandler):
+	def get(self):
+		coll=self.application.db.releases
+		releases = coll.find().sort("date", ASCENDING)
+		
+		
+		self.render(
+				"releases.html",
+				page_title = "Does Are | Releases",
+				header_text = "Releases",
+				releases = releases
+		)
+
+class ReleaseEditHandler(tornado.web.RequestHandler):
+	def get(self, releaseid=None):
+		release = dict()
+		allartists = dict()
+
+		if releaseid:
+			coll = self.application.db.releases
+			release = coll.find_one({"_id": ObjectId(releaseid)})
+		coll = self.application.db.artists
+		allartists = coll.find()
+		self.render("release_edit.html",
+				page_title="Does Are | Discography",
+				header_text = "Edit release",
+				release=release,
+				allartists=allartists
+				)
+
+#post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
+	def post(self, releaseid=None):
+		release_fields = ['artist', 'title', 'date', 'catnum', 'image', 'description']
+		coll = self.application.db.releases
+		release = dict()
+		if releaseid:
+			release = coll.find_one({"_id": ObjectId(releaseid)})
+		for key in release_fields:
+			release[key] = self.get_argument(key, None)
+		
+		if releaseid:
+			coll.save(release)
+		else:
+			coll.insert(release)
+		self.redirect("/discography")
+
+
+#module for individual release
+class ReleaseModule(tornado.web.UIModule):
+	def render(self, release):
+		return self.render_string(
+				"modules/release.html",
+				release=release,
+		)
+	
+	def css_files(self):
+		return "/static/css/recommended.css"
+
+	def javascript_files(self):
+		return "/static/js/recommended.js"
+
 
 #boilerplate for starting server
 if __name__ == "__main__":

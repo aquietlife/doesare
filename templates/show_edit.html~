@@ -31,7 +31,7 @@
 	Description: <TEXTAREA COLS="40" ROWS="6" type="text" name="description">
 	{{ show.get('description', '')}}</TEXTAREA></br>
 
-	Share Links: <TEXTAREA COLS="40" ROWS="6" type="text" name="share">
+	Share Links: <TEXTAREA COLS="40" ROWS="6" type="text" name="sharelinks">
 	{{ show.get('sharelinks', '')}}</TEXTAREA></br>
 
 	<input type="submit" value="Save">

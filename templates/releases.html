@@ -1,0 +1,8 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+	{% for release in releases %}
+		{% module Release(release) %}
+	{% end %}
+{% end %}

@@ -34,20 +34,11 @@
 	Contact Info: <input type="text" name="contactinfo"
 	value="{{ artist.get('contactinfo', '') }}"></br>
 
-	Song 1: <input type="text" name="song1"
-	value="{{ artist.get('song1', '') }}"></br>
-
-	Song 2: <input type="text" name="song2"
-	value="{{ artist.get('song2', '') }}"</br>
-	
-	Song 3: <input type="text" name="song3"
-	value="{{ artist.get('song3', '') }}"></br>
-
-	Video: <input type="text" name="video"
-	value="{{ artist.get('video', '') }}"></br>
-	
 	Past Shows: <TEXTAREA COLS="40" ROWS="6" type="text" name="pastshows">
 		{{ artist.get('pastshows', '')}}</TEXTAREA></br>
+	
+	Videos:  <TEXTAREA COLS="40" ROWS="6" type="text" name="videos">
+	{{  artist.get('videos', '') }}</TEXTAREA></br>
 	<input type="submit" value="Save">
 </form>
 {% end %}
