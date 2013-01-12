@@ -64,8 +64,12 @@ class Application(tornado.web.Application):
 				(r"/editshow/(\w+)", ShowEditHandler),
 				(r"/deleteshow/(\w+)", DeleteShowHandler),
 				(r"/discography", ReleasesHandler),
-				(r"/addrelease", ReleaseEditHandler)
-				
+				(r"/release/(\w+)", ReleasePageHandler),
+				(r"/addrelease", ReleaseEditHandler),
+				(r"/editrelease/(\w+)", ReleaseEditHandler),
+				(r"/deleterelease/(\w+)", DeleteReleaseHandler),
+				(r"/releaseimageupload/(\w+)", ReleaseImageUploadHandler),
+				(r"/releaseimageuploaded/(\w+)", ReleaseImageUploadHandler)
 				]
 
 		settings = dict(
@@ -565,6 +569,27 @@ class ReleasesHandler(tornado.web.RequestHandler):
 				releases = releases
 		)
 
+#render individual releases
+class ReleasePageHandler(tornado.web.RequestHandler):
+	def get(self, releaseid=None):
+		release = dict()
+		artist = dict()
+		artistsindb = self.application.db.artists
+		
+		if releaseid:
+			coll = self.application.db.releases
+			release = coll.find_one({"_id": ObjectId(releaseid)})
+		
+		shortname = release['artist']
+		artistfullname = artistsindb.find_one({"shortname": shortname})['fullname']
+		self.render("release_page.html",
+				page_title="Does Are | Release Page",
+				header_text = "Release Page",
+				release=release,
+				artistfullname = artistfullname
+				)
+
+
 class ReleaseEditHandler(tornado.web.RequestHandler):
 	def get(self, releaseid=None):
 		release = dict()
@@ -596,8 +621,52 @@ class ReleaseEditHandler(tornado.web.RequestHandler):
 			coll.save(release)
 		else:
 			coll.insert(release)
-		self.redirect("/discography")
+		releaseid=release.get("_id", "")
+		releaseid = str(releaseid) #change objectid to string
+		imageroute = "/releaseimageupload/"
+		finalroute = imageroute + releaseid
+		self.redirect(finalroute)
 
+
+#image upload handler, renders upload form for particular artist, uploads an image for that artist to amazon s3 and saves location in db for that artist
+class ReleaseImageUploadHandler(tornado.web.RequestHandler):
+	def get(self, releaseid=None):
+		self.render("releasesimageupload.html", releaseid=releaseid)
+
+	def post(self, releaseid=None):
+		release = dict() #empty dict for artist
+		coll = self.application.db.releases # collection of artists
+		release = coll.find_one({"_id": ObjectId("50f1c86988ea0f4fa2376f5f")})
+		image=self.request.files['image'][0] #image post data from form
+		imagebody=image['body'] #body of image file
+		imagename = image['filename'] #image name and path
+		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W') #amazon s3 connection
+		bucket = conn.create_bucket('doesare_images') #bucket for images
+		k = Key(bucket) #key associated with image
+		k.key = imagename #sets key to image name
+		k.set_metadata("Content-Type", "image/jpeg") #sets metadata for image/jpeg
+		k.set_contents_from_string(imagebody) #puts image data into s3 bucket
+		k.set_acl('public-read') #makes image public 
+		release = coll.find_one({"_id": ObjectId(releaseid)}) #sets artists dict to artist from previous page, which we know is in the database
+		#print(releaseid)
+		release['image'] = imagename #sets imagename for artist to name of image uploaded
+		coll.save(release) #saves artist info back into database
+		#self.write(release)
+		self.redirect("/discography") #gives us a confirmation page
+
+#delete show handle, removes show from database
+class DeleteReleaseHandler(tornado.web.RequestHandler):
+	def get(self, releaseid=None):
+
+		self.render("deletereleaseconfirm.html", 
+				releaseid = releaseid)
+	def post(self, releaseid=None):
+		coll = self.application.db.releases
+		release = dict()
+		if releaseid:
+			release = coll.find_one({"_id": ObjectId(releaseid)})
+			coll.remove(release)
+		self.redirect("/discography")
 
 #module for individual release
 class ReleaseModule(tornado.web.UIModule):

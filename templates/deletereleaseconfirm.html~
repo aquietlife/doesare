@@ -1,0 +1,13 @@
+<html>
+	<head></head>
+	<body>
+		<p>Are you sure you want to delete {{releaseid}} ?</p>
+		<form method="POST" action="/deleterelease/{{releaseid}}">
+		<input type="submit" value="Yes">
+		</form>
+		<form method="GET" action="/discography">
+		<input type="submit" value="No">
+		</form>
+	</body>
+</html>
+

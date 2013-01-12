@@ -1,0 +1,15 @@
+{{ finalpath = "/releaseimageuploaded/" + releaseid }}
+<html>
+	<head></head>
+	<body>
+		<div class="form">
+			<p>Upload image for {{ releaseid }}</p>
+			<form method="POST" action ="{{finalpath}}" enctype="multipart/form-data">
+		File: <input type="file" name="image">
+		<br/>
+<input type="submit" value="Upload">
+</form>
+<p><a href="/discography">Skip</a>
+</div> 
+</body>
+</html>

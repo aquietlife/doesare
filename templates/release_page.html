@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+{% autoescape None %}
+
+{% block body %}
+<p><b>{{ artistfullname }}</b></p>
+	<p><b>Date</b><br> {{ release.get('title', '') }}</p>
+	<p><b>Image</b><br><img src="https://s3.amazonaws.com/doesare_images/{{ release.get('image', '')}}"<img></p>
+	<p><b>Catalog #</b><br>{{ release.get('catnum', '') }}</p>
+	<p><b>Release Date</b><br>{{ release.get('date', '') }} </p>
+	<p><b>Description</b><br> {{ release.get('description', '') }}</p>
+	<p> <a href="/deleterelease/{{release.get('_id', '')}}">Delete</a> | <a href="/editrelease/{{release.get('_id', '')}}">Edit</a> </p>
+{% end %}
