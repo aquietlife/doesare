@@ -8,6 +8,13 @@
 
 	Short Name (all undercase, no spaces):  <input type="text" name="shortname"
 	value="{{ artist.get('shortname', '') }}"></br>
+	
+	Priority: <input type="text" name="priority" 
+	value="{{artist.get('priority', '') }}"></br>
+
+
+	Active: <input type="text" name="active" 
+	value="{{artist.get('active', '') }}"></br>
 
 	Members: <input type="text" name="members"
 	value="{{ artist.get('members', '') }}"></br>

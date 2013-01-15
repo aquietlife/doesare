@@ -166,7 +166,7 @@ class AboutEditHandler(tornado.web.RequestHandler):
 class ArtistsHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll=self.application.db.artists
-		artists = coll.find()
+		artists = coll.find({"active": "true"}).sort("priority", ASCENDING)
 		self.render(
 				"artists.html",
 				page_title = "Does Are | Recommended Artists",
@@ -188,7 +188,7 @@ class BandEditHandler(tornado.web.RequestHandler):
 
 #post handler for editing artists, adds if new or edits if already in database, sends to imageupload handler to upload an image to amazon s3
 	def post(self, shortname=None):
-		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'videos', 'pastshows']
+		artist_fields = ['fullname', 'shortname', 'members', 'image', 'location', 'description','link', 'releases', 'tourdates', 'contactinfo', 'videos', 'pastshows', 'priority', 'active']
 		coll = self.application.db.artists
 		artist = dict()
 		if shortname:
