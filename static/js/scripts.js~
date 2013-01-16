@@ -1,6 +1,6 @@
 $(document).ready(function(){
-	var imageNumber = Math.round(Math.random()*7);
+	var imageNumber = Math.round(Math.random()*26);
 		
-	$("html").css("background", "url(/static/images/bg/"+ imageNumber +".jpg) no-repeat center center fixed");
+	$("html").css("background", "url(https://s3.amazonaws.com/doesare_releases/"+ imageNumber +".jpg) no-repeat center center fixed");
 
 });
