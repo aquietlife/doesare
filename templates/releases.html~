@@ -1,8 +1,7 @@
 {% extends "main.html" %}
-
+{% autoescape None %}
 {% block body %}
 
-	{% for release in releases %}
-		{% module Release(release) %}
-	{% end %}
+<p>{{finalHTML}}</p>
+
 {% end %}

@@ -564,22 +564,33 @@ class ShowModule(tornado.web.UIModule):
 
 class ReleasesHandler(tornado.web.RequestHandler):
 	def get(self):
+		finalHTML = ""
+		
 		releasescollection=self.application.db.releases
 		releases = releasescollection.find().sort("date", ASCENDING)
 		
-		#artistscollection = self.application.db.artists
-		#artists = artistscollection.find()
+		allartists=self.application.db.artists
+		for release in releases:
+			releaseartist = release["artist"]
+			artistindb = allartists.find_one({"shortname": releaseartist})
+			finalHTML = finalHTML + "<p>"
+			finalHTML = finalHTML + release['catnum']
+			finalHTML = finalHTML + " | "
+			finalHTML = finalHTML + "<a href=/release/"
+			finalHTML = finalHTML + str(release['_id'])
+			finalHTML = finalHTML + '>'
+			finalHTML = finalHTML + release['title']
+			finalHTML = finalHTML + "</a>"
+			finalHTML = finalHTML + " by "
+			finalHTML = finalHTML + artistindb['fullname']
+			finalHTML = finalHTML + "</p>"
 
-		#for release in releases:
-		#	shortname = release.get("artist", "")
-		#	artistfullname = artistscollection({"shortname": shortname})['fullname']
-		#	release["artist"] =  artistfullname
 
 		self.render(
 				"releases.html",
 				page_title = "Does Are | Releases",
 				header_text = "Releases",
-				releases = releases
+				finalHTML = finalHTML
 		)
 
 #render individual releases

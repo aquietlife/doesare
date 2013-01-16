@@ -2,7 +2,7 @@
 {% autoescape None %}
 
 {% block body %}
-	<p><b>{{ artistfullname }}</b></p>
+	<p><b><a href="/artists/{{release.get('artist', '')}}">{{ artistfullname }}</a></b></p>
 	<p><b>Title</b><br> <i>{{ release.get('title', '') }}</i></p>
 	<p><b>Image</b><br><img width="400px" src="https://s3.amazonaws.com/doesare_images/{{ release.get('image', '')}}"<img></p>
 	<p><b>Catalog #</b><br>{{ release.get('catnum', '') }}</p>
