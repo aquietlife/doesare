@@ -6,11 +6,12 @@
 	<p><img width="400px" src="https://s3.amazonaws.com/doesare_images/{{ artist.get('image', '') }}"</img></p>
 	<p><b>Members</b><br> {{ artist.get('members', '') }}</p>
 	<p><b>Description</b><br> {{ artist.get('description', '') }}</p>
-	<p><b>Releases</b><br><i> {{ artist.get('releases', '') }} </i></p>
-	<!--
-	<br>
-	<p>tourdates: {{ artist.get('tourdates', '') }}</p>
-	-->
+	<p><b>Releases</b><br>
+	{%for release in releases%}
+	<a href="/release/{{release['_id']}}"><i>{{release['title']}}</i></a><br>
+	{% end %}
+	</p>
+	<!--<p>tourdates: {{ artist.get('tourdates', '') }}</p>-->
 	<p><b>Contact</b><br> {{ artist.get('contactinfo', '') }}</p>
 	<p><b>Links</b><br>{{artist.get('link', '') }}</p>
 	<p><b>Videos</b><br>{{artist.get('videos', '') }}</p>

@@ -223,13 +223,19 @@ class DeleteArtistHandler(tornado.web.RequestHandler):
 class ArtistPageHandler(tornado.web.RequestHandler):
 	def get(self, name=None):
 		artist = dict()
+		#return artist from artist database
 		if name:
 			coll = self.application.db.artists
 			artist = coll.find_one({"shortname": name})
+		#return releases from artist in database
+			coll = self.application.db.releases
+			releases = coll.find({"artist": name}).sort("date", ASCENDING)
+
 		self.render("artist_page.html",
 				page_title="Does Are | Band Page",
 				header_text = "Band Page",
-				artist=artist)
+				artist=artist,
+				releases=releases)
 
 #module for individual artist
 class ArtistModule(tornado.web.UIModule):
