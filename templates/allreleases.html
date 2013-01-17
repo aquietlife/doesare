@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+	{% for release in releases %}
+	<p>
+	{{release.get("title", "")}} | <a href="/editrelease/{{str(release['_id'])}}">Edit</a> | <a href="/deleterelease/{{str(release['_id'])}}">Delete</a>
+	</p>
+	{% end %}
+{% end %}

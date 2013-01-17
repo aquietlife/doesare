@@ -2,7 +2,6 @@
 
 {% block body %}
 
-<h2>Artists</h2>
 	{% for artist in artists %}
 		{% module Artist(artist) %}
 	{% end %}

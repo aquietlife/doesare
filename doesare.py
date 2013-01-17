@@ -69,7 +69,11 @@ class Application(tornado.web.Application):
 				(r"/editrelease/(\w+)", ReleaseEditHandler),
 				(r"/deleterelease/(\w+)", DeleteReleaseHandler),
 				(r"/releaseimageupload/(\w+)", ReleaseImageUploadHandler),
-				(r"/releaseimageuploaded/(\w+)", ReleaseImageUploadHandler)
+				(r"/releaseimageuploaded/(\w+)", ReleaseImageUploadHandler),
+				(r"/admin", AdminHandler),
+				(r"/allartists", AllArtistsHandler),
+				(r"/allreleases", AllReleasesHandler),
+				(r"/allshows", AllShowsHandler)
 				]
 
 		settings = dict(
@@ -250,6 +254,15 @@ class ArtistModule(tornado.web.UIModule):
 
 	def javascript_files(self):
 		return "/static/js/recommended.js"
+
+class AllArtistsHandler(tornado.web.RequestHandler):
+	def get(self):
+		coll = self.application.db.artists
+		artists = coll.find()
+
+		self.render("allartists.html",
+				page_title = "Does Are | All Artists",
+				artists= artists)
 
 #shop handler, gets shop text from db, renders shop page
 class ShopHandler(tornado.web.RequestHandler):
@@ -547,6 +560,18 @@ class DeleteShowHandler(tornado.web.RequestHandler):
 			show = coll.find_one({"_id": ObjectId(showid)})
 			coll.remove(show)
 		self.redirect("/shows")
+
+
+class AllShowsHandler(tornado.web.RequestHandler):
+	def get(self):
+		coll = self.application.db.shows
+		shows = coll.find()
+
+		self.render("allshows.html",
+				page_title = "Does Are | All Shows",
+				shows = shows)
+
+
 #module for individual show
 class ShowModule(tornado.web.UIModule):
 	def render(self, show):
@@ -692,7 +717,16 @@ class DeleteReleaseHandler(tornado.web.RequestHandler):
 			coll.remove(release)
 		self.redirect("/discography")
 
-#module for individual release
+class AllReleasesHandler(tornado.web.RequestHandler):
+	def get(self):
+		coll = self.application.db.releases
+		releases = coll.find()
+
+		self.render("allreleases.html",
+				page_title = "Does Are | All Releases",
+				releases = releases)
+
+		#module for individual release
 class ReleaseModule(tornado.web.UIModule):
 	def render(self, release):
 		return self.render_string(
@@ -705,6 +739,11 @@ class ReleaseModule(tornado.web.UIModule):
 
 	def javascript_files(self):
 		return "/static/js/recommended.js"
+
+class AdminHandler(tornado.web.RequestHandler):
+	def get(self):
+		self.render("admin.html", 
+				page_title = "Does Are | Admin")
 
 
 #boilerplate for starting server

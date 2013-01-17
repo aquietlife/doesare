@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+	{% for show in shows %}
+	<p>{{show["date"]}} | {{show["location"]}} | {{show["venue"]}} |  {{show["time"]}} | <a href="/editshow/{{str(show['_id'])}}">Edit</a> | <a href="/deleteshow/{{str(show['_id'])}}">Delete</a>
+	</p>
+	{% end %}
+{% end %}

@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block body %}
+
+	{% for artist in artists %}
+	<p>
+	{{artist.get("fullname", "")}} | <a href="/edit/{{artist['shortname']}}">Edit</a> | <a href="/deleteartist/{{artist['shortname']}}">Delete</a>
+	</p>
+	{% end %}
+{% end %}
