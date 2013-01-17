@@ -8,5 +8,4 @@
 	<p><b>Catalog #</b><br>{{ release.get('catnum', '') }}</p>
 	<p><b>Release Date</b><br>{{ release.get('date', '') }} </p>
 	<p><b>Description</b><br> {{ release.get('description', '') }}</p>
-	<p> <a href="/deleterelease/{{release.get('_id', '')}}">Delete</a> | <a href="/editrelease/{{release.get('_id', '')}}">Edit</a> </p>
 {% end %}
