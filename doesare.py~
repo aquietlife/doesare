@@ -7,7 +7,6 @@
 #-move mongodb and amazon s3 credentials to secure file
 #-get background images
 #-set up auth for back-end editing pages
-#-make a page to delete artists
 
 
 
@@ -71,6 +70,8 @@ class Application(tornado.web.Application):
 				(r"/releaseimageupload/(\w+)", ReleaseImageUploadHandler),
 				(r"/releaseimageuploaded/(\w+)", ReleaseImageUploadHandler),
 				(r"/admin", AdminHandler),
+				(r"/login", LoginHandler),
+				(r"/logout", LogoutHandler),
 				(r"/allartists", AllArtistsHandler),
 				(r"/allreleases", AllReleasesHandler)
 				]
@@ -79,12 +80,37 @@ class Application(tornado.web.Application):
 				template_path = os.path.join(os.path.dirname(__file__), "templates"),
 				static_path = os.path.join(os.path.dirname(__file__), "static"),
 				ui_modules={"Artist": ArtistModule, "Show": ShowModule, "Release": ReleaseModule},
+				cookie_secret = '7B4E23V9Se6kcysCmEHvLb6y3FEinUZUvueTzRRCpno=',
+				xsfr_cookies =True,
+				login_url = "/login",
 				debug = True,
 		)
 #mongo db configuration
 		conn = pymongo.Connection("mongodb://jdiedrick:Skyl1ne8*@flame.mongohq.com:27078/doesare")
 		self.db = conn["doesare"]
 		tornado.web.Application.__init__(self, handlers, **settings)
+
+class CookiesHandler(tornado.web.RequestHandler):
+	def get_current_user(self):
+		return self.get_secure_cookie("username")
+
+class LoginHandler(CookiesHandler):
+	def get(self):
+		self.render("login.html",
+				page_title="Does Are | Login"
+				)
+
+	def post(self):
+		if(self.get_argument("username") == "eddie"):
+			self.set_secure_cookie("username", self.get_argument("username"))
+			self.redirect("/admin")
+		else:
+			self.redirect("/admin")
+
+class LogoutHandler(CookiesHandler):
+	def get(self):
+		self.clear_cookie("username")
+		self.redirect("/news")
 
 #main handler, renders news page
 class MainHandler(tornado.web.RequestHandler):
@@ -739,7 +765,8 @@ class ReleaseModule(tornado.web.UIModule):
 	def javascript_files(self):
 		return "/static/js/recommended.js"
 
-class AdminHandler(tornado.web.RequestHandler):
+class AdminHandler(CookiesHandler):
+	@tornado.web.authenticated
 	def get(self):
 		self.render("admin.html", 
 				page_title = "Does Are | Admin")
