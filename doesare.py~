@@ -73,7 +73,7 @@ class Application(tornado.web.Application):
 				(r"/login", LoginHandler),
 				(r"/logout", LogoutHandler),
 				(r"/allartists", AllArtistsHandler),
-				(r"/allshows/", AllShowsHandler),
+				(r"/allshows", AllShowsHandler),
 				(r"/allreleases", AllReleasesHandler)
 				]
 
@@ -549,7 +549,7 @@ class ShowEditHandler(tornado.web.RequestHandler):
 			coll.save(show)
 		else:
 			coll.insert(show)
-		self.redirect("/shows")
+		self.redirect("/allshows")
 
 
 #render individual band pages
@@ -585,7 +585,7 @@ class DeleteShowHandler(tornado.web.RequestHandler):
 		if showid:
 			show = coll.find_one({"_id": ObjectId(showid)})
 			coll.remove(show)
-		self.redirect("/shows")
+		self.redirect("/allshows")
 
 
 class AllShowsHandler(tornado.web.RequestHandler):
