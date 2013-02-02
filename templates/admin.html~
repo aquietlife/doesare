@@ -3,8 +3,6 @@
 {% block body %}
 
 <p>
-<br>
-<br>
 <a href="/news/edit">Edit News Page</a>
 <br>
 <br>

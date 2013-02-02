@@ -73,6 +73,7 @@ class Application(tornado.web.Application):
 				(r"/login", LoginHandler),
 				(r"/logout", LogoutHandler),
 				(r"/allartists", AllArtistsHandler),
+				(r"/allshows", AllShowsHandler),
 				(r"/allreleases", AllReleasesHandler)
 				]
 
