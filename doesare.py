@@ -29,6 +29,7 @@ from boto.s3.key import Key
 from StringIO import StringIO
 import random
 import string
+import math
 
 #define global port
 define("port", default=8000, help="run on the given port", type=int)
@@ -38,8 +39,11 @@ class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
 				(r"/", MainHandler),
-				(r"/news", NewsHandler),
-				(r"/news/edit", NewsEditHandler),
+				(r"/news/([0-9]+)", NewsHandler),
+				(r"/news/addnews", NewsEditHandler), 
+				(r"/news/editnews/(\w+)", NewsEditHandler),
+				(r"/allnews", AllNewsHandler),
+				(r"/deletenewsitem/(\w+)", DeleteNewsItemHandler),
 				(r"/about", AboutHandler),
 				(r"/about/edit", AboutEditHandler),
 				(r"/artists", ArtistsHandler),
@@ -111,32 +115,47 @@ class LoginHandler(CookiesHandler):
 class LogoutHandler(CookiesHandler):
 	def get(self):
 		self.clear_cookie("username")
-		self.redirect("/news")
+		self.redirect("/news/1")
 
 #main handler, renders news page
 class MainHandler(tornado.web.RequestHandler):
 	def get(self):
-		self.redirect("/news")
+		self.redirect("/news/1")
 
 #news handler, pulls news from mongodb, renders news page
 class NewsHandler (tornado.web.RequestHandler):
-	def get(self):
+	def get(self, currentPage):
 		news_content = dict()
 		coll = self.application.db.news
-		news_content = coll.find_one({"name": "news"})
+		#news_content = coll.find_one({"name": "news"})
+		news = coll.find().sort("_id", DESCENDING)
+
+		#pagination code
+		currentPage = int(currentPage)
+		newsItemsPerPage = 2
+		totalNewsItems = coll.count()
+		totalPages = int(math.ceil(totalNewsItems/newsItemsPerPage))
+
+		startNewsItemNumber = (int(currentPage) - 1) * newsItemsPerPage
+		lastNewsItemNumber = startNewsItemNumber + newsItemsPerPage
+		news = news[startNewsItemNumber:lastNewsItemNumber]
+		
 		self.render(
 				"news.html",
 				page_title = "Does Are | News",
 				header_text = "News",
-				news_content = news_content
+				news = news,
+				currentPage = currentPage,
+				totalPages = totalPages
 		)
 
 #news edit handler, pulls news from mongodb for editing, and puts new news into mongodb
 class NewsEditHandler(tornado.web.RequestHandler):
-	def get(self):
+	def get(self, newsid=None):
 		news_content = dict()
-		coll = self.application.db.news
-		news_content = coll.find_one({"name": "news"})
+		if newsid:
+			coll = self.application.db.news
+			news_content = coll.find_one({"_id": ObjectId(newsid)})
 		self.render(
 				"news_edit.html",
 				page_title = "Does Are | Edit the News Page",
@@ -144,16 +163,44 @@ class NewsEditHandler(tornado.web.RequestHandler):
 				news_content = news_content
 		)
 	
-	def post(self):
+	def post(self, newsid=None):
 		news_field = ['text']
 		coll = self.application.db.news
 		news_content = dict()
-		news_content = coll.find_one({"name": "news"})
+		if newsid:
+			news_content = coll.find_one({"name": "news"})
 		for key in news_field:
 			news_content[key] = self.get_argument(key, None)
 
-		coll.save(news_content)
-		self.redirect("/news")
+		if newsid:
+			coll.save(news_content)
+		else:
+			coll.insert(news_content)
+		self.redirect("/news/1")
+
+
+class AllNewsHandler(tornado.web.RequestHandler):
+	def get(self):
+		coll = self.application.db.news
+		news = coll.find()
+
+		self.render("allnews.html",
+				page_title = "Does Are | All News",
+				news = news)
+
+class DeleteNewsItemHandler(tornado.web.RequestHandler):
+	def get(self, newsid=None):
+
+		self.render("deletenewsitemconfirm.html", 
+				newsid = newsid)
+	
+	def post(self, newsid=None):
+		coll = self.application.db.news
+		newsitem = dict()
+		if newsid:
+			newsitem = coll.find_one({"_id": ObjectId(newsid)})
+			coll.remove(newsitem)
+		self.redirect("/allnews")
 
 #about handler, gets about text from mongodb, renders about page
 class AboutHandler(tornado.web.RequestHandler):

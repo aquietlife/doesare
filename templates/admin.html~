@@ -3,7 +3,7 @@
 {% block body %}
 
 <p>
-<a href="/news/edit">Edit News Page</a>
+<a href="/news/addnews">Add News Item</a>
 <br>
 <br>
 <a href="/shop/edit">Edit Shop Page</a>

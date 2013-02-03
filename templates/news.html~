@@ -1,10 +1,15 @@
 {% extends "main.html" %}
 
 {% block body %}
-
+{% for news_item in news%}
 <p>
-{{ news_content.get('text', '') }}
+{{str(news_item['_id'])}}
 </p>
-
+<p>
+{{ news_item.get('text', '') }}
+</p>
 {% end %}
-
+<p>
+<a href="1">First</a> | <a href="{{currentPage-2}}">--</a> | <a href="{{currentPage-1}}">-</a> | {{currentPage}} | <a href="{{currentPage + 1}}">+</a>  | <a href="{{currentPage + 2}}">++</a> | <a href="{{totalPages}}">Last</a>
+</p>
+{% end %}

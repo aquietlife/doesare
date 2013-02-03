@@ -1,0 +1,13 @@
+<html>
+	<head></head>
+	<body>
+		<p>Are you sure you want to delete {{newsid}} ?</p>
+		<form method="POST" action="/deletenewsitem/{{newsid}}">
+		<input type="submit" value="Yes">
+		</form>
+		<form method="GET" action="/allnews">
+		<input type="submit" value="No">
+		</form>
+	</body>
+</html>
+
