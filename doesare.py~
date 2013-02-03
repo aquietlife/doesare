@@ -3,10 +3,7 @@
 #http://johanndiedrick.com
 
 #To do:
-#-simple css design
 #-move mongodb and amazon s3 credentials to secure file
-#-get background images
-#-set up auth for back-end editing pages
 
 
 
@@ -30,6 +27,7 @@ from StringIO import StringIO
 import random
 import string
 import math
+import datetime
 
 #define global port
 define("port", default=8000, help="run on the given port", type=int)
@@ -175,6 +173,8 @@ class NewsEditHandler(tornado.web.RequestHandler):
 		if newsid:
 			coll.save(news_content)
 		else:
+			now = datetime.datetime.now()
+			news_content["datetime_added"] = now.strftime("%Y-%m-%d %H:%M")
 			coll.insert(news_content)
 		self.redirect("/news/1")
 

@@ -4,7 +4,7 @@
 
 	{% for news_item in news %}
 	<p>
-	{{news_item.get("_id", "")}} | <a href="/news/editnews/{{news_item[str('_id')]}}">Edit</a> | <a href="/deletenewsitem/{{news_item[str('_id')]}}">Delete</a>
+	{{news_item.get("datetime_added", "")}} | <a href="/news/editnews/{{news_item[str('_id')]}}">Edit</a> | <a href="/deletenewsitem/{{news_item[str('_id')]}}">Delete</a>
 	</p>
 	{% end %}
 {% end %}

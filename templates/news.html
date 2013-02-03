@@ -3,7 +3,7 @@
 {% block body %}
 {% for news_item in news%}
 <p>
-{{str(news_item['_id'])}}
+<b>{{str(news_item['datetime_added'])}}</b>
 </p>
 <p>
 {{ news_item.get('text', '') }}
