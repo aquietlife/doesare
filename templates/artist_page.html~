@@ -11,6 +11,7 @@
 	<a href="/release/{{release['_id']}}"><i>{{release['title']}}</i></a><br>
 	{% end %}
 	</p>
+	<p><b>Other Releases</b><br>{{artist.get('otherreleases', '') }}</p>
 	<!--<p>tourdates: {{ artist.get('tourdates', '') }}</p>-->
 	<p><b>Contact</b><br> {{ artist.get('contactinfo', '') }}</p>
 	<p><b>Links</b><br>{{artist.get('link', '') }}</p>
