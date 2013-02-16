@@ -10,6 +10,6 @@
 </p>
 {% end %}
 <p>
-<a href="1">First</a> | <a href="{{currentPage-2}}">--</a> | <a href="{{currentPage-1}}">-</a> | {{currentPage}} | <a href="{{currentPage + 1}}">+</a>  | <a href="{{currentPage + 2}}">++</a> | <a href="{{totalPages}}">Last</a>
+<a href="1">First</a>{% if (currentPage-2) > 1%} | <a href="{{currentPage-2}}">--</a>{% end %} {% if (currentPage-1) > 1 %} | <a href="{{currentPage-1}}">-</a>{% end %} | {{currentPage}} {% if (currentPage + 1) < totalPages %} | <a href="{{currentPage + 1}}">+</a> {% end %}  {% if (currentPage + 2) < totalPages %}| <a href="{{currentPage + 2}}">++</a> {% end %}| <a href="{{totalPages +1}}">Last</a>
 </p>
 {% end %}
