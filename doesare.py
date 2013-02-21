@@ -665,7 +665,8 @@ class ReleasesHandler(tornado.web.RequestHandler):
 		finalHTML = ""
 		
 		releasescollection=self.application.db.releases
-		releases = releasescollection.find().sort("date", ASCENDING)
+		#organize discography by cat number
+		releases = releasescollection.find().sort("catnum", ASCENDING)
 		
 		allartists=self.application.db.artists
 		for release in releases:
@@ -793,7 +794,7 @@ class DeleteReleaseHandler(tornado.web.RequestHandler):
 class AllReleasesHandler(tornado.web.RequestHandler):
 	def get(self):
 		coll = self.application.db.releases
-		releases = coll.find()
+		releases = coll.find().sort("catnum", ASCENDING);
 
 		self.render("allreleases.html",
 				page_title = "Does Are | All Releases",
