@@ -24,8 +24,6 @@ import math
 import datetime
 import ssl_fix
 
-from doesare_globals import aws_public_key, aws_secret_key, mongo_db
-
 #define global port
 define("port", default=8000, help="run on the given port", type=int)
 
@@ -86,7 +84,7 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.Connection(mongo_db)
+		conn = pymongo.Connection(os.getenv('DOESARE_MONGO_DB'))
 		self.db = conn["doesare"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -490,7 +488,11 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		image=self.request.files['image'][0] #image post data from form
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
-		conn = S3Connection(aws_public_key, aws_secret_key, is_secure=False) #amazon s3 connection
+		conn = S3Connection(os.getenv('DOESARE_AWS_PUBLIC_KEY'),
+				os.getenv('DOESARE_AWS_SECRET_KEY'), is_secure=False) #amazon s3 connection
+
+
+
 		##change is_secure##
 		bucket = conn.create_bucket('doesare_images') #bucket for images
 		k = Key(bucket) #key associated with image
