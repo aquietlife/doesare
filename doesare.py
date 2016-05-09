@@ -84,7 +84,7 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.Connection(os.getenv('DOESARE_MONGO_DB'))
+		conn = pymongo.MongoClient(os.getenv('DOESARE_MONGO_DB'))
 		self.db = conn["doesare"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
