@@ -4,7 +4,7 @@
 {% block body %}
 <form method="POST">
 
-	Text <TEXTAREA  COLS="40" ROWS="6"  name="text">
+	Text <TEXTAREA  COLS="40" ROWS="6"  name="newcomment">
 		{{ news_content.get('text', '') }}</TEXTAREA></br>
 	<input type="submit" value="Save">
 </form>

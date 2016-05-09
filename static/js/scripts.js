@@ -1,7 +1,7 @@
 $(document).ready(function(){
-	var imageNumber = Math.round(Math.random()*26);
+	var imageNumber = Math.round(Math.random()*20);
 		
-	$("html").css("background", "url(https://s3.amazonaws.com/doesare_releases/"+ imageNumber +".jpg) no-repeat center center fixed");
+	$("html").css("background", "url(https://s3-us-west-2.amazonaws.com/doesare/"+ imageNumber +".jpg) no-repeat center center fixed");
 
 });
 

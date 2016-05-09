@@ -2,12 +2,6 @@
 #Programmed by Johann Diedrick
 #http://johanndiedrick.com
 
-#To do:
-#-move mongodb and amazon s3 credentials to secure file
-
-
-
-
 #import necessary libraries
 import os.path
 import tornado.httpserver
@@ -28,6 +22,9 @@ import random
 import string
 import math
 import datetime
+import ssl_fix
+
+from doesare_globals import aws_public_key, aws_secret_key, mongo_db
 
 #define global port
 define("port", default=8000, help="run on the given port", type=int)
@@ -89,7 +86,7 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.Connection("mongodb://jdiedrick:Skyl1ne8*@flame.mongohq.com:27078/doesare")
+		conn = pymongo.Connection(mongo_db)
 		self.db = conn["doesare"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -493,7 +490,8 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		image=self.request.files['image'][0] #image post data from form
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
-		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W') #amazon s3 connection
+		conn = S3Connection(aws_public_key, aws_secret_key, is_secure=False) #amazon s3 connection
+		##change is_secure##
 		bucket = conn.create_bucket('doesare_images') #bucket for images
 		k = Key(bucket) #key associated with image
 		k.key = imagename #sets key to image name
@@ -763,7 +761,7 @@ class ReleaseImageUploadHandler(tornado.web.RequestHandler):
 		image=self.request.files['image'][0] #image post data from form
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
-		conn = S3Connection('AKIAISN6VWLSWH3KLXZQ','93Yb2QSv0mRelZNizM1nvk3tI/7Fq1vmarDQfa9W') #amazon s3 connection
+		conn = S3Connection(aws_public_key, aws_secret_key) #amazon s3 connection
 		bucket = conn.create_bucket('doesare_images') #bucket for images
 		k = Key(bucket) #key associated with image
 		k.key = imagename #sets key to image name
