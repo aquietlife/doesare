@@ -84,8 +84,8 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.MongoClient(os.getenv('DOESARE_MONGO_DB'))
-		self.db = conn["doesare"]
+		conn = pymongo.MongoClient(os.getenv('MONGODB_URI'))
+		self.db = conn["heroku_rxb6c5xk"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
 class CookiesHandler(tornado.web.RequestHandler):
