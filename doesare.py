@@ -84,7 +84,7 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.MongoClient(os.getenv('MONGODB_URI'))
+		conn = pymongo.MongoClient(os.getenv('DOESARE_MONGODB_URI'))
 		self.db = conn["heroku_rxb6c5xk"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
