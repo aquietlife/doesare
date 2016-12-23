@@ -494,7 +494,7 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 
 
 		##change is_secure##
-		bucket = conn.create_bucket('doesare_images') #bucket for images
+		bucket = conn.get_bucket('doesare') #bucket for images
 		k = Key(bucket) #key associated with image
 		k.key = imagename #sets key to image name
 		k.set_metadata("Content-Type", "image/jpeg") #sets metadata for image/jpeg
@@ -764,7 +764,7 @@ class ReleaseImageUploadHandler(tornado.web.RequestHandler):
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
 		conn = S3Connection(aws_public_key, aws_secret_key) #amazon s3 connection
-		bucket = conn.create_bucket('doesare_images') #bucket for images
+		bucket = conn.get_bucket('doesare') #bucket for images
 		k = Key(bucket) #key associated with image
 		k.key = imagename #sets key to image name
 		k.set_metadata("Content-Type", "image/jpeg") #sets metadata for image/jpeg
