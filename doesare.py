@@ -23,6 +23,12 @@ import string
 import math
 import datetime
 import ssl_fix
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+#import env vars from .env
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 #define global port
 define("port", default=8000, help="run on the given port", type=int)
@@ -84,7 +90,7 @@ class Application(tornado.web.Application):
 				debug = True,
 		)
 #mongo db configuration
-		conn = pymongo.MongoClient(os.getenv('DOESARE_MONGODB_URI'))
+		conn = pymongo.MongoClient(os.environ.get('DOESARE_MONGODB_URI'))
 		self.db = conn["heroku_rxb6c5xk"]
 		tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -488,11 +494,7 @@ class ImageUploadHandler(tornado.web.RequestHandler):
 		image=self.request.files['image'][0] #image post data from form
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
-		conn = S3Connection(os.getenv('DOESARE_AWS_PUBLIC_KEY'),
-				os.getenv('DOESARE_AWS_SECRET_KEY'), is_secure=False) #amazon s3 connection
-
-
-
+		conn = S3Connection(os.environ.get('DOESARE_AWS_PUBLIC_KEY'), os.environ.get('DOESARE_AWS_SECRET_KEY'), is_secure=False) #amazon s3 connection
 		##change is_secure##
 		bucket = conn.get_bucket('doesare') #bucket for images
 		k = Key(bucket) #key associated with image
@@ -763,7 +765,7 @@ class ReleaseImageUploadHandler(tornado.web.RequestHandler):
 		image=self.request.files['image'][0] #image post data from form
 		imagebody=image['body'] #body of image file
 		imagename = image['filename'] #image name and path
-		conn = S3Connection(aws_public_key, aws_secret_key) #amazon s3 connection
+		conn = S3Connection(os.environ.get('DOESARE_AWS_PUBLIC_KEY'), os.environ.get('DOESARE_AWS_SECRET_KEY'), is_secure=False) #amazon s3 connection
 		bucket = conn.get_bucket('doesare') #bucket for images
 		k = Key(bucket) #key associated with image
 		k.key = imagename #sets key to image name
